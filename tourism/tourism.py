@@ -55,7 +55,7 @@ def display_menu():
 # Function to handle user input and validation
 def get_user_input(prompt, options=None):
     while True:
-        user_input = input(prompt).strip()
+        user_input = str(input(prompt)).strip()
 
         if options and user_input not in options:
             print("Invalid input. Please try again.")
