@@ -75,7 +75,7 @@ def display_landmarks():
     if landmarks:
         print("Here is information about the local landmarks:")
         for landmark in landmarks:
-            print(f"ID: {landmark[0]}, Name: {landmark[1]}, Description: {landmark[2]}")
+            print("ID: {}, Name: {}, Description: {}".format(landmark[0], landmark[1], landmark[2]))
     else:
         print("No landmarks found in the database.")
 
