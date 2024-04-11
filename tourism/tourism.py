@@ -25,7 +25,6 @@ def create_database():
         ('Lake Kivu', 'One of Africa\'s Great Lakes, known for its scenic beauty and resort towns.'),
         ('Nyungwe Forest National Park', 'A tropical rainforest with diverse flora, fauna, and chimpanzees.'),
         ('Inema Arts Center', 'An art space showcasing contemporary Rwandan and African art.'),
-        ('Iby’Iwacu Cultural Village', 'A cultural village showcasing traditional Rwandan lifestyle and activities.'),
         ('Gisozi Genocide Memorial', 'A memorial site dedicated to the victims of the Rwandan Genocide, located in Kigali.'),
         ('Nyanza Royal Palace', 'A historical site featuring the former royal palace of the Rwandan monarchy, located in Nyanza.'),
         ('Murambi Genocide Memorial', 'A memorial site preserving the remains of victims of the Rwandan Genocide, located in Murambi.'),
