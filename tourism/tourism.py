@@ -84,7 +84,7 @@ def display_landmarks():
 
 # Function for chatting with the program
 def chat_with_program():
-    print("Chatting with the program... Ask me anything about tourism!")
+    print("Hello! Please use this email:ank@yahoo.com ,to chat with one of our agents!!")
 
 # Function to display progress
 def display_progress():
