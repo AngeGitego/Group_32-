@@ -2,6 +2,7 @@ Tourism Education Program for Local Schools
 Overview
 The Tourism Education Program for Local Schools is a Python-based, menu-driven application with SQL database integration. It aims to provide students with a basic understanding and appreciation of the local tourism industry through structured and interactive learning modules.
 
+User Information
 Table of Content
 Key Features
 Getting Started
