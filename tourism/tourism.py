@@ -55,12 +55,12 @@ def display_menu():
 # Function to handle user input and validation
 def get_user_input(prompt, options=None):
     while True:
-        user_input = input(prompt).strip()
+        user_input = input(prompt)
 
-        if options and user_input not in options:
+        if options and user_input.strip() not in options:
             print("Invalid input. Please try again.")
         else:
-            return user_input
+            return user_input.strip()
 
 # Function to display information about landmarks
 def display_landmarks():
