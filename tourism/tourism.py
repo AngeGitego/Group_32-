@@ -170,7 +170,7 @@ def main():
         elif choice == "3":
             mark_visited_landmark()
         elif choice == "4":
-            view_progress()
+            display_progress()
         elif choice == "5":
             print("Thank you for using the Tourism Education Program. Goodbye!")
             break
