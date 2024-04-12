@@ -110,7 +110,7 @@ def mark_visited_landmark():
         if user_progress:
             visited_landmarks = user_progress[1]
             if visited_landmarks:
-                visited_landmarks += f", {landmark[1]}"
+                visited_landmarks += ", {}".format(landmark[1])
             else:
                 visited_landmarks = landmark[1]
 
@@ -118,14 +118,13 @@ def mark_visited_landmark():
         else:
             cursor.execute("INSERT INTO user_progress (user_id, landmarks_visited) VALUES (?, ?)", (user_id, landmark[1]))
 
-        print(f"You have successfully marked {landmark[1]} as visited!")
+        print("You have successfully marked {} as visited!".format(landmark[1]))
     else:
         print("Invalid landmark ID. Please try again.")
 
     # Commit changes and close the database connection
     conn.commit()
     conn.close()
-
 
 # Function for chatting with the program
 def chat_with_program():
