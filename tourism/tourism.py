@@ -75,7 +75,7 @@ def display_landmarks():
     if landmarks:
         print("Here is information about the local landmarks:")
         for landmark in landmarks:
-            print(f"ID: {landmark[0]}, Name: {landmark[1]}, Description: {landmark[2]}")
+            print("ID: {}, Name: {}, Description: {}".format(landmark[0], landmark[1], landmark[2]))
     else:
         print("No landmarks found in the database.")
 
@@ -108,7 +108,7 @@ def mark_visited_landmark():
         if user_progress:
             visited_landmarks = user_progress[1]
             if visited_landmarks:
-                visited_landmarks += f", {landmark[1]}"
+                visited_landmarks += ", " + landmark[1]
             else:
                 visited_landmarks = landmark[1]
 
@@ -116,7 +116,7 @@ def mark_visited_landmark():
         else:
             cursor.execute("INSERT INTO user_progress (user_id, landmarks_visited) VALUES (?, ?)", (user_id, landmark[1]))
 
-        print(f"You have successfully marked {landmark[1]} as visited!")
+        print("You have successfully marked {} as visited!".format(landmark[1]))
     else:
         print("Invalid landmark ID. Please try again.")
 
@@ -158,4 +158,3 @@ def main():
 # Execute the main function if the script is run
 if __name__ == "__main__":
     main()
-
