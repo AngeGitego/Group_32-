@@ -94,7 +94,7 @@ def mark_visited_landmark():
     display_landmarks()
 
     # Get the landmark ID from the user
-    landmark_id = input("Enter the ID of the landmark you have visited: ").strip()
+    landmark_id = str(input("Enter the ID of the landmark you have visited: ")).strip()
 
     # Check if the landmark ID is valid
     cursor.execute("SELECT * FROM landmarks WHERE id = ?", (landmark_id,))
@@ -110,7 +110,7 @@ def mark_visited_landmark():
         if user_progress:
             visited_landmarks = user_progress[1]
             if visited_landmarks:
-                visited_landmarks += ", " + landmark[1]
+                visited_landmarks += f", {landmark[1]}"
             else:
                 visited_landmarks = landmark[1]
 
@@ -118,13 +118,14 @@ def mark_visited_landmark():
         else:
             cursor.execute("INSERT INTO user_progress (user_id, landmarks_visited) VALUES (?, ?)", (user_id, landmark[1]))
 
-        print("You have successfully marked {} as visited!".format(landmark[1]))
+        print(f"You have successfully marked {landmark[1]} as visited!")
     else:
         print("Invalid landmark ID. Please try again.")
 
     # Commit changes and close the database connection
     conn.commit()
     conn.close()
+
 
 # Function for chatting with the program
 def chat_with_program():
