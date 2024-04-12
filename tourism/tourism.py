@@ -130,9 +130,29 @@ def mark_visited_landmark():
 def chat_with_program():
     print("Chatting with the program... Ask me anything about tourism!")
 
-# Function to view user progress
-def view_progress():
-    print("Viewing progress... You haven't visited any landmarks yet!")
+def display_progress():
+    # Connect to the database
+    conn = sqlite3.connect("tourism_education.db")
+    cursor = conn.cursor()
+
+    # Fetch user's progress
+    user_id = 1  # Assuming a single user for simplicity
+    cursor.execute("SELECT * FROM user_progress WHERE user_id = ?", (user_id,))
+    user_progress = cursor.fetchone()
+
+    if user_progress:
+        visited_landmarks = user_progress[1]
+        if visited_landmarks:
+            print("Viewing progress... You have visited the following landmarks:")
+            for landmark in visited_landmarks.split(","):
+                print(landmark.strip())
+        else:
+            print("Viewing progress... You haven't visited any landmarks yet!")
+    else:
+        print("Viewing progress... You haven't visited any landmarks yet!")
+
+    # Close the database connection
+    conn.close()
 
 # Main function to orchestrate the program
 def main():
