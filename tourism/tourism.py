@@ -15,7 +15,7 @@ def create_database():
         )
     ''')
 
-    # Insert sample data into landmarks table (including the additional landmarks)
+    # Insert sample data into landmarks table
     cursor.executemany('''
         INSERT INTO landmarks (name, description) VALUES (?, ?)
     ''', [
@@ -24,22 +24,21 @@ def create_database():
         ('Kigali Genocide Memorial', 'A memorial honoring the victims of the Rwandan Genocide.'),
         ('Lake Kivu', 'One of Africa\'s Great Lakes, known for its scenic beauty and resort towns.'),
         ('Nyungwe Forest National Park', 'A tropical rainforest with diverse flora, fauna, and chimpanzees.'),
-        ('Inema Arts Center', 'An art space showcasing contemporary Rwandan and African art.'),
-        ('Gisozi Genocide Memorial', 'A memorial site dedicated to the victims of the Rwandan Genocide, located in Kigali.'),
-        ('Nyanza Royal Palace', 'A historical site featuring the former royal palace of the Rwandan monarchy, located in Nyanza.'),
-        ('Murambi Genocide Memorial', 'A memorial site preserving the remains of victims of the Rwandan Genocide, located in Murambi.'),
-        ('Rubavu Beach', 'A popular beach destination along the shores of Lake Kivu, offering stunning views and recreational activities.'),
-        ('Musanze Caves', 'A network of caves located in Musanze district, offering opportunities for exploration and adventure.'),
-        ('Karongi (Kibuye)', 'A scenic town situated on the shores of Lake Kivu, known for its picturesque landscapes and tranquil atmosphere.'),
-        ('Butare National Museum', 'The largest museum in Rwanda, featuring exhibits on Rwandan history, culture, and ethnography.'),
-        ('Virunga Mountains', 'A volcanic mountain range spanning Rwanda, Uganda, and the Democratic Republic of the Congo, home to endangered mountain gorillas.'),
-        ('Rwesero Arts Museum', 'An art museum located in Nyanza, showcasing contemporary and traditional Rwandan art.')
+        ('Inema Arts Center', 'An art space showcasing contemporary Rwandan and African art.')
     ])
+
+    # Create user progress table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS user_progress (
+            user_id INTEGER PRIMARY KEY,
+            landmarks_visited TEXT
+        )
+    ''')
 
     conn.commit()
     conn.close()
 
-# Function to welcome users to the program
+# Function to welcome students to the program
 def welcome():
     print("Welcome to the Tourism Education Program!")
     print("Let's explore the local tourism industry.\n")
@@ -49,18 +48,21 @@ def display_menu():
     print("MENU:")
     print("1. Learn about local landmarks and attractions")
     print("2. Chat with the program")
-    print("3. View your progress")
-    print("4. Exit")
+    print("3. Mark a landmark as visited")
+    print("4. View your progress")
+    print("5. Exit")
 
 # Function to handle user input and validation
 def get_user_input(prompt, options=None):
     while True:
-        user_input = str(input(prompt)).strip()
+        user_input = input(prompt)
 
-        if options and user_input not in options:
+        if options and str(user_input).strip() not in options:
             print("Invalid input. Please try again.")
         else:
-            return user_input
+            return str(user_input).strip()
+
+
 
 # Function to display information about landmarks
 def display_landmarks():
@@ -82,13 +84,75 @@ def display_landmarks():
     # Close the database connection
     conn.close()
 
+# Function to mark a landmark as visited
+def mark_visited_landmark():
+    # Connect to the database
+    conn = sqlite3.connect("tourism_education.db")
+    cursor = conn.cursor()
+
+    # Display the list of landmarks
+    display_landmarks()
+
+    # Get the landmark ID from the user
+    landmark_id = str(input("Enter the ID of the landmark you have visited: ")).strip()
+
+    # Check if the landmark ID is valid
+    cursor.execute("SELECT * FROM landmarks WHERE id = ?", (landmark_id,))
+    landmark = cursor.fetchone()
+
+    if landmark:
+        # Fetch the current user progress
+        user_id = 1  # Assuming a single user for simplicity
+        cursor.execute("SELECT * FROM user_progress WHERE user_id = ?", (user_id,))
+        user_progress = cursor.fetchone()
+
+        # Update the user progress to include the visited landmark
+        if user_progress:
+            visited_landmarks = user_progress[1]
+            if visited_landmarks:
+                visited_landmarks += ", {}".format(landmark[1])
+            else:
+                visited_landmarks = landmark[1]
+
+            cursor.execute("UPDATE user_progress SET landmarks_visited = ? WHERE user_id = ?", (visited_landmarks, user_id))
+        else:
+            cursor.execute("INSERT INTO user_progress (user_id, landmarks_visited) VALUES (?, ?)", (user_id, landmark[1]))
+
+        print("You have successfully marked {} as visited!".format(landmark[1]))
+    else:
+        print("Invalid landmark ID. Please try again.")
+
+    # Commit changes and close the database connection
+    conn.commit()
+    conn.close()
+
 # Function for chatting with the program
 def chat_with_program():
-    print("Hello! Please use this email:ank@yahoo.com ,to chat with one of our agents!!")
+    print("Chatting with the program... Ask me anything about tourism!")
 
-# Function to display progress
 def display_progress():
-    print("Viewing progress... You haven't visited any landmarks yet!")
+    # Connect to the database
+    conn = sqlite3.connect("tourism_education.db")
+    cursor = conn.cursor()
+
+    # Fetch user's progress
+    user_id = 1  # Assuming a single user for simplicity
+    cursor.execute("SELECT * FROM user_progress WHERE user_id = ?", (user_id,))
+    user_progress = cursor.fetchone()
+
+    if user_progress:
+        visited_landmarks = user_progress[1]
+        if visited_landmarks:
+            print("Viewing progress... You have visited the following landmarks:")
+            for landmark in visited_landmarks.split(","):
+                print(landmark.strip())
+        else:
+            print("Viewing progress... You haven't visited any landmarks yet!")
+    else:
+        print("Viewing progress... You haven't visited any landmarks yet!")
+
+    # Close the database connection
+    conn.close()
 
 # Main function to orchestrate the program
 def main():
@@ -97,15 +161,17 @@ def main():
 
     while True:
         display_menu()
-        choice = get_user_input("Enter the number of your choice (1-4): ", options=["1", "2", "3", "4"])
+        choice = get_user_input("Enter the number of your choice (1-5): ", options=["1", "2", "3", "4", "5"])
 
         if choice == "1":
             display_landmarks()
         elif choice == "2":
             chat_with_program()
         elif choice == "3":
-            display_progress()
+            mark_visited_landmark()
         elif choice == "4":
+            display_progress()
+        elif choice == "5":
             print("Thank you for using the Tourism Education Program. Goodbye!")
             break
         else:
@@ -114,4 +180,3 @@ def main():
 # Execute the main function if the script is run
 if __name__ == "__main__":
     main()
-
